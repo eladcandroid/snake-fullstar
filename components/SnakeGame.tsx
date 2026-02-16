@@ -157,80 +157,79 @@ export default function SnakeGame() {
   // Remove the other useEffect that was syncing score and highScore
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6 p-8">
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-4xl font-bold text-emerald-600">Snake Game</h1>
-        <div className="flex gap-8 text-xl font-medium">
-          <p>Score: <span className="text-emerald-500">{score}</span></p>
-          <p>High Score: <span className="text-amber-500">{highScore}</span></p>
+    <div className="flex flex-col items-center justify-center w-full min-h-screen gap-4 p-4 sm:p-8 bg-zinc-50 dark:bg-zinc-950">
+      <div className="flex flex-col items-center gap-2 w-full max-w-2xl">
+        <div className="flex items-center justify-between w-full px-4 py-2 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+          <h1 className="text-2xl font-bold text-emerald-600">Snake</h1>
+          <div className="flex gap-6 text-lg font-medium">
+            <p>Score: <span className="text-emerald-500">{score}</span></p>
+            <p>High: <span className="text-amber-500">{highScore}</span></p>
+          </div>
         </div>
       </div>
 
       <div 
-        className="relative border-4 border-zinc-800 bg-zinc-900 shadow-2xl overflow-hidden"
-        style={{ 
-          width: GRID_SIZE * 20, 
-          height: GRID_SIZE * 20,
-          display: 'grid',
-          gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-          gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
-        }}
+        className="relative aspect-square w-full max-w-[85vh] border-8 border-zinc-800 bg-zinc-900 shadow-2xl overflow-hidden rounded-lg"
       >
         {/* Render Snake */}
         {snake.map((segment, i) => (
           <div
             key={`${i}-${segment.x}-${segment.y}`}
-            className={`absolute w-[20px] h-[20px] transition-all duration-150 ${
+            className={`absolute transition-all duration-150 ${
               i === 0 ? "bg-emerald-400 z-10" : "bg-emerald-600"
             } rounded-sm`}
             style={{
-              left: segment.x * 20,
-              top: segment.y * 20,
+              left: `${(segment.x / GRID_SIZE) * 100}%`,
+              top: `${(segment.y / GRID_SIZE) * 100}%`,
+              width: `${100 / GRID_SIZE}%`,
+              height: `${100 / GRID_SIZE}%`,
             }}
           />
         ))}
 
         {/* Render Food */}
         <div
-          className="absolute w-[20px] h-[20px] bg-rose-500 rounded-full animate-pulse"
+          className="absolute bg-rose-500 rounded-full animate-pulse"
           style={{
-            left: food.x * 20,
-            top: food.y * 20,
+            left: `${(food.x / GRID_SIZE) * 100}%`,
+            top: `${(food.y / GRID_SIZE) * 100}%`,
+            width: `${100 / GRID_SIZE}%`,
+            height: `${100 / GRID_SIZE}%`,
           }}
         />
 
         {/* Game Over / Pause Overlays */}
         {(isGameOver || isPaused) && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm text-white">
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-md text-white p-6 text-center">
             {isGameOver ? (
               <>
-                <h2 className="text-4xl font-bold mb-4 text-rose-500">GAME OVER</h2>
+                <h2 className="text-5xl font-black mb-2 text-rose-500 tracking-tighter">GAME OVER</h2>
+                <p className="text-xl mb-6 text-zinc-300 font-medium">Final Score: {score}</p>
                 <button
                   onClick={resetGame}
-                  className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-full font-bold transition-colors"
+                  className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 rounded-full font-bold text-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
                 >
-                  Try Again
+                  Play Again
                 </button>
               </>
             ) : (
               <>
-                <h2 className="text-4xl font-bold mb-4">PAUSED</h2>
+                <h2 className="text-5xl font-black mb-6 tracking-tighter">PAUSED</h2>
                 <button
                   onClick={() => setIsPaused(false)}
-                  className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-full font-bold transition-colors"
+                  className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 rounded-full font-bold text-lg shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
                 >
                   Resume
                 </button>
               </>
             )}
-            <p className="mt-4 text-sm text-zinc-400">Press Space to {isGameOver ? 'restart' : 'toggle'}</p>
+            <p className="mt-8 text-sm text-zinc-400 uppercase tracking-widest font-semibold">Press Space to {isGameOver ? 'restart' : 'toggle'}</p>
           </div>
         )}
       </div>
 
-      <div className="flex flex-col items-center gap-2 text-zinc-500 text-sm">
-        <p>Use Arrow Keys to move</p>
-        <p>Press Space to pause/resume</p>
+      <div className="flex flex-col items-center gap-1 text-zinc-500 text-sm font-medium">
+        <p>Use Arrow Keys to move • Space to pause</p>
       </div>
     </div>
   );
